@@ -25,6 +25,21 @@ app = FastAPI(
     description="Autonomous, bounded AI revenue recovery decision engine for Track 03."
 )
 
+@app.get("/")
+def root():
+    return {
+        "title": "RecoverAI – AI Revenue Recovery Platform API",
+        "status": "online",
+        "documentation": "/docs",
+        "health_check": "/health",
+        "endpoints": {
+            "summary": "/api/recovery/summary",
+            "health_score": "/api/recovery/health-score",
+            "audit_trail": "/api/recovery/audit",
+            "hitl_queue": "/api/recovery/hitl"
+        }
+    }
+
 @app.get("/health")
 def health():
     return {"status": "ok", "system": "RecoverAI Agent Engine", "version": "1.0.0"}
