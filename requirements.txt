@@ -3,7 +3,6 @@ uvicorn
 streamlit
 pandas
 numpy
-scikit-learn
 pydantic
 python-dotenv
 requests

@@ -1,0 +1,15 @@
+# Exclude heavy video files, temp build artifacts, and tests from Vercel function bundle
+*.mp4
+*.mp3
+temp_pitch_build/
+.pytest_cache/
+logs/
+data/*.db
+docs/
+docker/
+tests/
+.git/
+build_playable_pitch_video.py
+concat_video.py
+generate_pitch_video.py
+.env

@@ -8,7 +8,20 @@ import json
 import time
 import pandas as pd
 from typing import Dict, Any, List
-from sklearn.metrics import precision_score, recall_score, f1_score
+def precision_score(y_true, y_pred, zero_division=0):
+    tp = sum(1 for t, p in zip(y_true, y_pred) if t == 1 and p == 1)
+    fp = sum(1 for t, p in zip(y_true, y_pred) if t == 0 and p == 1)
+    return tp / (tp + fp) if (tp + fp) > 0 else float(zero_division)
+
+def recall_score(y_true, y_pred, zero_division=0):
+    tp = sum(1 for t, p in zip(y_true, y_pred) if t == 1 and p == 1)
+    fn = sum(1 for t, p in zip(y_true, y_pred) if t == 1 and p == 0)
+    return tp / (tp + fn) if (tp + fn) > 0 else float(zero_division)
+
+def f1_score(y_true, y_pred, zero_division=0):
+    p = precision_score(y_true, y_pred, zero_division)
+    r = recall_score(y_true, y_pred, zero_division)
+    return (2 * p * r) / (p + r) if (p + r) > 0 else float(zero_division)
 
 
 from data.synthetic_generator import generate_synthetic_batch
