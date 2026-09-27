@@ -68,6 +68,32 @@ class RazorpayClient:
             "mode": "test_sandbox"
         }
 
+    def create_payment_method_swap_link(
+        self,
+        event_id: str,
+        amount: float,
+        customer_name: str,
+        customer_email: str,
+        customer_phone: str,
+        failed_method: str = "card"
+    ) -> Dict[str, Any]:
+        """
+        Generates a specialized One-Click Payment Method Swap link (UPI/Netbanking Intent)
+        to recover payments when standard card dunning fails.
+        """
+        description = f"Method Swap Recovery ({failed_method.upper()} -> UPI/Netbanking) for {event_id}"
+        plink = self.create_payment_link(
+            amount=amount,
+            description=description,
+            customer_name=customer_name,
+            customer_email=customer_email,
+            customer_phone=customer_phone
+        )
+        plink["swap_from"] = failed_method
+        plink["recommended_methods"] = ["upi", "netbanking", "wallet"]
+        plink["upi_intent_url"] = f"upi://pay?pa=razorpay@icici&pn=RecoverAI&am={plink['amount']}&tr={event_id}&cu=INR"
+        return plink
+
     def simulate_payment_captured_webhook(self, event_id: str, payment_id: str, amount: float) -> Dict[str, Any]:
         """
         Simulates an incoming Razorpay payment.captured webhook payload.

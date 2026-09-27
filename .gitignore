@@ -13,3 +13,14 @@ logs/
 .DS_Store
 .pytest_cache/
 
+# Ignore videos, generated audio, and pitch video builder scripts
+*.mp4
+*.mp3
+temp_pitch_build/
+generate_pitch_video.py
+build_playable_pitch_video.py
+concat_video.py
+docs/PITCH_SCRIPT_5MIN.md
+data/audio/
+
+

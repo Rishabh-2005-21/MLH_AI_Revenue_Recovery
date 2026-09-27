@@ -37,12 +37,18 @@ def predict_upcoming_card_expiries(count: int = 15) -> List[Dict[str, Any]]:
             "bank_name": random.choice(["HDFC Bank", "ICICI Bank", "SBI", "Axis Bank", "Kotak Bank"]),
             "expiry_date": exp_date,
             "days_to_expiry": days_to_expiry,
+            "risk_score": risk_score / 100.0,
             "preemptive_risk_score": risk_score,
+            "pre_dunning_action": "PREEMPTIVE_CARD_UPDATE_NUDGE",
             "update_portal_link": f"https://rzp.io/l/mandate_update_{random.randint(100, 999)}",
             "status": "PREEMPTIVE_NOTICE_SENT" if days_to_expiry <= 14 else "MONITORING"
         })
 
     return sorted(records, key=lambda x: x["days_to_expiry"])
+
+def scan_and_predict_at_risk_renewals(count: int = 15) -> List[Dict[str, Any]]:
+    return predict_upcoming_card_expiries(count=count)
+
 
 def generate_preemptive_update_notice(record: Dict[str, Any]) -> Dict[str, Any]:
     """

@@ -10,11 +10,14 @@ from app.services.diagnoser import diagnose
 from app.services.decision_agent import choose_action
 from app.services.recovery import execute_recovery_workflow
 from app.services.voice_agent import generate_hinglish_script, simulate_interactive_objection
-from app.services.promise_to_pay import verify_p2p_settlements
+from app.services.promise_to_pay import verify_p2p_settlements, create_installment_split_plan
+from app.services.razorpay_client import RazorpayClient
 from app.services.digital_twin import run_digital_twin_simulation
 from app.services.copilot import answer_merchant_copilot, calculate_merchant_health_score
 from app.evaluation.evaluate import run_batch_evaluation
 from data.synthetic_generator import generate_synthetic_batch
+
+razorpay_client = RazorpayClient()
 
 app = FastAPI(
     title="RecoverAI – AI Revenue Recovery API",
@@ -63,6 +66,26 @@ def execute_event(event: Dict[str, Any] = Body(...)):
         "decision": decision,
         "execution": result
     }
+
+@app.post("/api/recovery/payment-swap")
+def create_payment_swap(event_id: str = Body(...), amount: float = Body(...), name: str = Body(...), email: str = Body(...), phone: str = Body(...)):
+    return razorpay_client.create_payment_method_swap_link(
+        event_id=event_id,
+        amount=amount,
+        customer_name=name,
+        customer_email=email,
+        customer_phone=phone
+    )
+
+@app.post("/api/recovery/micro-split")
+def create_micro_split(event_id: str = Body(...), customer_id: str = Body(...), name: str = Body(...), amount: float = Body(...), installments: int = Body(2)):
+    return create_installment_split_plan(
+        event_id=event_id,
+        customer_id=customer_id,
+        customer_name=name,
+        total_amount=amount,
+        installments_count=installments
+    )
 
 @app.post("/api/recovery/batch")
 def execute_batch(batch_size: int = 100):

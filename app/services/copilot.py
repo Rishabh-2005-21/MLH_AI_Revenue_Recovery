@@ -37,13 +37,40 @@ def calculate_merchant_health_score() -> Dict[str, Any]:
         ]
     }
 
+from app.services.gemini_service import call_gemini_api, is_gemini_available
+
 def answer_merchant_copilot(query: str) -> str:
     """
     Merchant Recovery Copilot AI engine that answers merchant revenue questions.
+    Uses Google Gemini API when configured.
     """
-    q = query.lower()
     stats = get_summary_stats()
     health = calculate_merchant_health_score()
+
+    if is_gemini_available():
+        context = f"""
+Current Merchant Recovery Live Analytics Context:
+- Total At-Risk Revenue: ₹{stats['total_at_risk']:,.2f}
+- Total Recovered Money: ₹{stats['total_recovered']:,.2f}
+- Recovery Rate: {stats['recovery_rate']:.1f}%
+- Total Processed Events: {stats['total_events']}
+- Merchant Health Score: {health['health_score']}/100 (Grade: {health['grade']})
+- Active Guardrails: Max 2 retries, 9 PM - 9 AM quiet hours, >₹50,000 HITL supervisor approval threshold
+"""
+        system_instruction = f"""
+You are the Merchant Recovery Copilot AI for RecoverAI.
+You give data-backed financial insights, root-cause analyses, and optimization strategies to merchants.
+Use the following live store metrics context:
+{context}
+
+Format your response cleanly in Markdown with professional emojis. Keep responses concise, precise, and actionable.
+"""
+        gemini_res = call_gemini_api(query, system_instruction=system_instruction)
+        if gemini_res:
+            return f"✨ **Merchant Recovery Copilot (Powered by Gemini AI)**:\n\n{gemini_res}"
+
+    # Fallback Rule Engine
+    q = query.lower()
 
     if any(w in q for w in ["lost", "at risk", "yesterday", "slipping"]):
         return f"📊 **Revenue at Risk Report**: Currently, **₹{stats['total_at_risk']:,.2f}** in potential revenue was flagged at risk across {stats['total_events']} events."
@@ -84,3 +111,4 @@ Try asking me:
 - *"What is our Merchant Recovery Health Score?"*
 - *"Give me recommendations to improve recovery rate"*
 """
+

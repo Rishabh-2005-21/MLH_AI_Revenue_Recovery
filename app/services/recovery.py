@@ -1,5 +1,5 @@
 import random
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any
 from app.models import ActionType, ActionStatus
 from app.services.guardrails import validate_action
@@ -148,7 +148,7 @@ def execute_recovery_workflow(event: Dict[str, Any], decision: Dict[str, Any], s
         "payload": execution_result,
         "applied_guardrails": applied_rules,
         "money_recovered": money_recovered,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     })
 
     log_audit(

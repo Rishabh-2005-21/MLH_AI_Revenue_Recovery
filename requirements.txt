@@ -13,4 +13,6 @@ pytest
 httpx
 razorpay
 gtts
+google-genai
+
 

@@ -1,7 +1,7 @@
 import os
 import requests
 from typing import List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timezone
 
 from app.database import save_risk_event
 from app.services.detector import detect_revenue_at_risk
@@ -78,5 +78,5 @@ def fetch_live_failed_payments_from_razorpay() -> Dict[str, Any]:
         "status": "success",
         "ingested_count": len(ingested_events),
         "events_synced": ingested_events,
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(timezone.utc).isoformat()
     }

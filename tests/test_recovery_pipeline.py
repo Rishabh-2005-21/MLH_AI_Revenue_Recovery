@@ -77,3 +77,77 @@ def test_batch_evaluation():
     assert metrics["precision"] >= 0.0
     assert metrics["recall"] >= 0.0
     assert metrics["total_revenue_recovered"] >= 0.0
+
+def test_payment_method_swap_link():
+    from app.services.razorpay_client import RazorpayClient
+    client = RazorpayClient()
+    plink = client.create_payment_method_swap_link(
+        event_id="EVT_SWAP_01",
+        amount=5000.0,
+        customer_name="Priya Patel",
+        customer_email="priya@example.com",
+        customer_phone="+919876543210",
+        failed_method="card"
+    )
+    assert plink["swap_from"] == "card"
+    assert "upi" in plink["recommended_methods"]
+    assert "upi_intent_url" in plink
+
+def test_installment_split_plan():
+    from app.services.promise_to_pay import create_installment_split_plan
+    plan = create_installment_split_plan("EVT_SPLIT_01", "CUST_100", "Aman Verma", 20000.0, installments_count=2)
+    assert plan["total_amount"] == 20000.0
+    assert plan["installments_count"] == 2
+    assert plan["amount_per_installment"] == 10000.0
+    assert len(plan["schedule"]) == 2
+
+def test_retry_sequencer_bank_avoidance():
+    from app.services.retry_sequencer import calculate_optimal_retry_schedule
+    event = {"event_id": "EVT_RETRY_01", "bank_name": "SBI"}
+    schedule = calculate_optimal_retry_schedule(event)
+    assert schedule["bank_name"] == "SBI"
+    assert "recommended_retry_time" in schedule
+    assert schedule["expected_success_probability"] > 0.0
+
+def test_digital_twin_simulation():
+    from app.services.digital_twin import run_digital_twin_simulation
+    from data.synthetic_generator import generate_synthetic_batch
+    events = generate_synthetic_batch(count=15, seed=99)
+    sim_result = run_digital_twin_simulation(events)
+    assert sim_result["total_events_simulated"] == 15
+    assert "baseline_retries" in sim_result["strategies_compared"]
+    assert "ai_next_best_action" in sim_result["strategies_compared"]
+    assert sim_result["strategies_compared"]["ai_next_best_action"]["net_recovered_revenue"] >= 0.0
+
+def test_copilot_assistant_queries():
+    from app.services.copilot import answer_merchant_copilot, calculate_merchant_health_score
+    resp = answer_merchant_copilot("What is my current recovery rate?")
+    assert "Recovery Rate" in resp or "recovered" in resp.lower()
+    health = calculate_merchant_health_score()
+    assert "health_score" in health
+    assert 0 <= health["health_score"] <= 100
+
+def test_predictive_expiry_engine():
+    from app.services.predictive_expiry import scan_and_predict_at_risk_renewals
+    renewals = scan_and_predict_at_risk_renewals(count=10)
+    assert len(renewals) == 10
+    for item in renewals:
+        assert "risk_score" in item
+        assert "pre_dunning_action" in item
+
+def test_whatsapp_multitone_generation():
+    from app.services.whatsapp_service import generate_whatsapp_recovery_message
+    event = {"event_id": "EVT_WA_01", "amount": 3500.0, "customer": {"name": "Deepak", "preferred_language": "Hinglish"}}
+    msg_hinglish = generate_whatsapp_recovery_message(event, tone="Hinglish")
+    assert "Namaste" in msg_hinglish["whatsapp_message_text"]
+
+    event_formal = {"event_id": "EVT_WA_02", "amount": 3500.0, "customer": {"name": "Deepak", "preferred_language": "Formal"}}
+    msg_formal = generate_whatsapp_recovery_message(event_formal, tone="Formal")
+    assert "Dear" in msg_formal["whatsapp_message_text"]
+
+def test_voice_objection_handling():
+    from app.services.voice_agent import simulate_interactive_objection
+    obj = simulate_interactive_objection("EVT_V_01", "no_money_today")
+    assert obj["status"] == "PROMISE_TO_PAY_RECORDED"
+    assert "p2p_id" in obj
+

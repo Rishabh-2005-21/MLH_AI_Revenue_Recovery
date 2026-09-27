@@ -12,7 +12,7 @@ import json
 from datetime import datetime, timedelta
 
 st.set_page_config(
-    page_title="Razorpay RecoverAI – AI Revenue Recovery Platform",
+    page_title="MLH RecoverAI – AI Revenue Recovery Platform",
     page_icon="💳",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -107,53 +107,70 @@ st.markdown("""
         margin-bottom: 24px;
     }
 
-    /* Razorpay Product Card (Dark Card Box) */
+    /* Keyframe Animations for Liquid / Morphing Wave Fills */
+    @keyframes liquidWave {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    @keyframes morphGlow {
+        0% { border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+        50% { border-color: rgba(217, 70, 239, 0.6); box-shadow: 0 20px 40px rgba(56, 189, 248, 0.4); }
+        100% { border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+    }
+
+    /* Razorpay Product Card (Dark 3D Depth Card Box - Top/Middle section) */
     .rzp-card-exact {
         background: #1e2540;
-        border: 1.5px solid rgba(255, 255, 255, 0.1);
-        border-radius: 18px;
+        border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+        border-left: 1.5px solid rgba(255, 255, 255, 0.1);
+        border-right: 1.5px solid rgba(255, 255, 255, 0.1);
+        border-bottom: none !important;
+        border-radius: 20px 20px 0 0 !important;
         overflow: hidden;
-        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-        height: 380px !important;
+        transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        height: 290px !important;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        margin-bottom: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        margin-bottom: 0px !important;
+        cursor: pointer;
     }
 
     .rzp-card-exact:hover {
-        transform: translateY(-8px);
+        transform: translateY(-4px);
         border-color: #38bdf8;
-        box-shadow: 0 20px 40px rgba(56, 189, 248, 0.25);
+        box-shadow: 0 22px 50px rgba(56, 189, 248, 0.35), 0 0 25px rgba(2, 132, 199, 0.2);
     }
 
     .rzp-card-top-asset {
-        height: 190px;
+        height: 160px;
         background: linear-gradient(135deg, rgba(2, 132, 199, 0.3) 0%, rgba(30, 41, 59, 0.9) 100%);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         position: relative;
-        padding: 20px;
+        padding: 16px;
     }
 
     .rzp-card-tag {
         position: absolute;
-        top: 14px;
-        right: 14px;
+        top: 12px;
+        right: 12px;
         background: #0284c7;
         color: #ffffff;
         font-size: 0.72rem;
         font-weight: 800;
-        padding: 4px 10px;
+        padding: 3px 9px;
         border-radius: 6px;
         letter-spacing: 0.05em;
     }
 
     .rzp-card-bottom-content {
-        padding: 20px 22px;
+        padding: 16px 20px 10px 20px;
         flex-grow: 1;
         display: flex;
         flex-direction: column;
@@ -162,35 +179,60 @@ st.markdown("""
     }
 
     .rzp-card-h3 {
-        font-size: 1.25rem;
+        font-size: 1.15rem;
         font-weight: 800;
         color: #ffffff !important;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
     }
 
     .rzp-card-p {
-        font-size: 0.9rem;
+        font-size: 0.86rem;
         color: #94a3b8 !important;
-        line-height: 1.5;
+        line-height: 1.45;
         font-weight: 500;
     }
 
-    /* Buttons Styling */
+    /* Column Button Section: Placed seamlessly inside bottom of card box */
+    div[data-testid="column"] .stButton {
+        background: #1e2540 !important;
+        border-left: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+        border-right: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+        border-bottom: 1.5px solid rgba(255, 255, 255, 0.1) !important;
+        border-top: none !important;
+        border-radius: 0 0 20px 20px !important;
+        padding: 0px 16px 16px 16px !important;
+        margin-top: 0px !important;
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    /* Buttons Styling: Liquid Morphing Fill + 3D Depth Press Effect */
     .stButton > button {
-        background-color: #0284c7 !important;
+        background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #0369a1 100%) !important;
+        background-size: 200% 200% !important;
         color: #ffffff !important;
-        border: 1.5px solid #0284c7 !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
         font-weight: 800 !important;
-        border-radius: 10px !important;
+        border-radius: 12px !important;
         height: 44px !important;
-        font-size: 0.92rem !important;
-        transition: all 0.2s ease !important;
+        font-size: 0.88rem !important;
+        position: relative !important;
+        overflow: hidden !important;
+        box-shadow: 0 4px 0 #034b75, 0 8px 18px rgba(2, 132, 199, 0.35) !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        width: 100% !important;
     }
 
     .stButton > button:hover {
-        background-color: #0369a1 !important;
-        border-color: #0369a1 !important;
-        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4) !important;
+        background-position: 100% 100% !important;
+        animation: liquidWave 3s ease infinite !important;
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 0 #034b75, 0 15px 30px rgba(56, 189, 248, 0.5) !important;
+        border-color: #38bdf8 !important;
+    }
+
+    .stButton > button:active {
+        transform: translateY(3px) scale(0.98) !important;
+        box-shadow: 0 1px 0 #034b75, 0 4px 10px rgba(0, 0, 0, 0.4) !important;
     }
 
     /* Dark SaaS Container for Specific Feature Pages */
@@ -320,7 +362,8 @@ if "active_feature" not in st.session_state:
 
 
 # ==============================================================================
-# OFFICIAL RAZORPAY TOP NAVBAR
+# ==============================================================================
+# OFFICIAL MLH (MAJOR LEAGUE HACKING) TOP NAVBAR
 # ==============================================================================
 
 nav_col1, nav_col2, nav_col3 = st.columns([5.5, 3.5, 3])
@@ -328,23 +371,24 @@ nav_col1, nav_col2, nav_col3 = st.columns([5.5, 3.5, 3])
 with nav_col1:
     st.markdown("""
     <div style="display:flex; align-items:center; gap:16px;">
-        <svg width="220" height="42" viewBox="0 0 240 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 42H28L40 16H24L12 42Z" fill="#0A2540"/>
-            <path d="M26 16L44 4L34 42H24L26 16Z" fill="#2B84EA"/>
-            <text x="52" y="36" font-family="'Plus Jakarta Sans', sans-serif" font-style="italic" font-weight="900" font-size="34" fill="#FFFFFF" letter-spacing="-1">Razorpay</text>
+        <svg width="230" height="48" viewBox="0 0 280 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <text x="10" y="70" font-family="'Trebuchet MS', 'Arial Black', sans-serif" font-weight="900" font-size="74" fill="#E73C27">M</text>
+            <text x="90" y="70" font-family="'Trebuchet MS', 'Arial Black', sans-serif" font-weight="900" font-size="74" fill="#2E52A4">L</text>
+            <text x="155" y="70" font-family="'Trebuchet MS', 'Arial Black', sans-serif" font-weight="900" font-size="74" fill="#F0B332">H</text>
+            <text x="115" y="98" font-family="'Plus Jakarta Sans', 'Arial Black', sans-serif" font-weight="900" font-size="13" fill="#FFFFFF" letter-spacing="2.5" text-anchor="middle">MAJOR LEAGUE HACKING</text>
         </svg>
-        <span style="background:rgba(43, 132, 234, 0.25); border:1.5px solid #2B84EA; color:#38bdf8; padding:4px 12px; border-radius:12px; font-weight:800; font-size:0.82rem; letter-spacing:0.04em;">RECOVER AI</span>
+        <span style="background:linear-gradient(90deg, rgba(231, 60, 39, 0.25), rgba(240, 179, 50, 0.25)); border:1.5px solid #F0B332; color:#F0B332; padding:4px 12px; border-radius:12px; font-weight:800; font-size:0.82rem; letter-spacing:0.04em;">RECOVER AI</span>
     </div>
     """, unsafe_allow_html=True)
 
 with nav_col2:
-    st.markdown("<div style='margin-top:8px; color:#cbd5e1; font-size:0.9rem; font-weight:700;'>🏆 Razorpay AI Buildathon 2026 • Track 03</div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-top:8px; color:#cbd5e1; font-size:0.9rem; font-weight:700;'>🏆 Major League Hacking (MLH) 2026</div>", unsafe_allow_html=True)
 
 with nav_col3:
     if razorpay_client.is_live:
-        st.markdown("<div style='margin-top:8px;'><span class='badge-success'>● LIVE RAZORPAY API CONNECTED</span></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:8px;'><span class='badge-success'>● LIVE GATEWAY CONNECTED</span></div>", unsafe_allow_html=True)
     else:
-        st.markdown("<div style='margin-top:8px;'><span class='badge-warning'>● TEST SANDBOX MODE</span></div>", unsafe_allow_html=True)
+        st.markdown("<div style='margin-top:8px;'><span class='badge-warning'>● MLH TEST SANDBOX MODE</span></div>", unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -356,17 +400,46 @@ st.markdown("---")
 if st.session_state["active_feature"] == "home":
     
     # --------------------------------------------------
-    # RAZORPAY DARK HOME SHOWCASE PAGE
+    # MLH DARK HOME SHOWCASE PAGE
     # --------------------------------------------------
     st.markdown("""
     <div class="hero-container">
-        <div class="hero-badge">⚡ POWERED BY RAZORPAY RECOVERAI ENGINE</div>
+        <div class="hero-badge">⚡ POWERED BY MLH RECOVERAI ENGINE</div>
         <div class="hero-headline">Find Revenue That's Slipping Away<br>and Win It Back Automatically.</div>
         <div class="hero-sub">
             An autonomous AI decision engine built for Indian merchants to detect payment degradation, checkout drop-offs, failed subscription renewals, and overdue B2B receivables.
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+
+    st.markdown("""
+    <div class="rzp-showcase-box" style="margin-bottom:28px;">
+        <div class="rzp-showcase-title">💰 Enterprise Revenue Recovery ROI Calculator</div>
+        <p style="color:#94a3b8; font-weight:600; font-size:1.02rem; margin-top:-16px; margin-bottom:20px;">Calculate how much ARR RecoverAI saves for your transaction volume:</p>
+    """, unsafe_allow_html=True)
+
+    col_calc1, col_calc2, col_calc3 = st.columns([4, 4, 4])
+    with col_calc1:
+        monthly_vol = st.slider("Monthly Processing Volume (₹)", min_value=500000, max_value=50000000, value=10000000, step=500000, format="₹%d")
+    with col_calc2:
+        failure_rate = st.slider("Payment Failure Rate (%)", min_value=2.0, max_value=20.0, value=8.5, step=0.5, format="%.1f%%")
+    with col_calc3:
+        recovery_eff = st.slider("RecoverAI Recovery Efficiency (%)", min_value=15.0, max_value=60.0, value=38.0, step=1.0, format="%.1f%%")
+
+    at_risk_mon = monthly_vol * (failure_rate / 100.0)
+    recovered_mon = at_risk_mon * (recovery_eff / 100.0)
+    arr_saved = recovered_mon * 12
+
+    m_col1, m_col2, m_col3 = st.columns(3)
+    with m_col1:
+        st.metric("Monthly Revenue at Risk", f"₹{at_risk_mon:,.0f}")
+    with m_col2:
+        st.metric("Monthly Recovered (Net)", f"₹{recovered_mon:,.0f}", delta=f"+{recovery_eff:.0f}% Recovered")
+    with m_col3:
+        st.metric("Annualized ARR Saved", f"₹{arr_saved:,.0f}", delta="Saved Revenue")
+
+    st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("""
     <div class="rzp-showcase-box">
@@ -546,7 +619,7 @@ if st.session_state["active_feature"] == "home":
     s1, s2, s3, s4 = st.columns(4)
     with s1:
         st.markdown("""
-        <div class="rzp-card-exact" style="height: 280px !important;">
+        <div class="rzp-card-exact" style="height: 200px !important;">
             <div class="rzp-card-top-asset" style="height: 120px; background: rgba(255, 255, 255, 0.05);">
                 <span class="rzp-card-tag">BENCHMARK</span>
                 <div style="font-size:2.5rem;">⚡</div>
@@ -565,7 +638,7 @@ if st.session_state["active_feature"] == "home":
 
     with s2:
         st.markdown("""
-        <div class="rzp-card-exact" style="height: 280px !important;">
+        <div class="rzp-card-exact" style="height: 200px !important;">
             <div class="rzp-card-top-asset" style="height: 120px; background: rgba(239, 68, 68, 0.15);">
                 <span class="rzp-card-tag">APPROVALS</span>
                 <div style="font-size:2.5rem;">⚖️</div>
@@ -584,7 +657,7 @@ if st.session_state["active_feature"] == "home":
 
     with s3:
         st.markdown("""
-        <div class="rzp-card-exact" style="height: 280px !important;">
+        <div class="rzp-card-exact" style="height: 200px !important;">
             <div class="rzp-card-top-asset" style="height: 120px; background: rgba(2, 132, 199, 0.15);">
                 <span class="rzp-card-tag">AUDIT LOG</span>
                 <div style="font-size:2.5rem;">📜</div>
@@ -603,21 +676,21 @@ if st.session_state["active_feature"] == "home":
 
     with s4:
         st.markdown("""
-        <div class="rzp-card-exact" style="height: 280px !important;">
-            <div class="rzp-card-top-asset" style="height: 120px; background: rgba(34, 197, 94, 0.15);">
-                <span class="rzp-card-tag">SAFETY</span>
-                <div style="font-size:2.5rem;">🛡️</div>
+        <div class="rzp-card-exact" style="height: 200px !important;">
+            <div class="rzp-card-top-asset" style="height: 120px; background: linear-gradient(135deg, rgba(56, 189, 248, 0.3) 0%, rgba(30, 41, 59, 0.9) 100%);">
+                <span class="rzp-card-tag">SANDBOX</span>
+                <div style="font-size:2.5rem;">⚡</div>
             </div>
             <div class="rzp-card-bottom-content">
                 <div>
-                    <div class="rzp-card-h3">Guardrails Policy</div>
-                    <div class="rzp-card-p">Enforces max 2 retries, 9 PM–9 AM quiet hours, auto-stop on payment.</div>
+                    <div class="rzp-card-h3">Live Webhook Sandbox</div>
+                    <div class="rzp-card-p">Simulate live Razorpay failure webhooks, test dynamic payment swap links & AI agent actions.</div>
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("🛡️ View Guardrails Policy", key="btn_s4", use_container_width=True):
-            st.session_state["active_feature"] = "analytics"
+        if st.button("⚡ Launch Live Webhook Simulator", key="btn_s4", use_container_width=True):
+            st.session_state["active_feature"] = "webhook_simulator"
             st.rerun()
 
     st.markdown("</div>", unsafe_allow_html=True) # End rzp-showcase-box
@@ -1006,5 +1079,82 @@ else:
             st.dataframe(pd.DataFrame(logs)[["id", "timestamp", "event_id", "category", "event_type", "actor", "money_recovered"]], use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
+    # LIVE WEBHOOK SIMULATOR PAGE VIEW
+    elif st.session_state["active_feature"] == "webhook_simulator":
+        st.markdown("<div class='white-card'>", unsafe_allow_html=True)
+        st.subheader("⚡ Live Razorpay Webhook & Agent Pipeline Sandbox")
+        st.write("Simulate real-time incoming Razorpay payment failure webhooks and observe RecoverAI's multi-step detection, diagnosis, guardrails, and Razorpay Payment Link generation in real-time.")
+
+        ws_col1, ws_col2 = st.columns([5, 7])
+
+        with ws_col1:
+            st.markdown("#### 1. Input Simulated Webhook Event")
+            sim_name = st.text_input("Customer Name", value="Rahul Verma", key="ws_name")
+            sim_phone = st.text_input("Customer Phone", value="+919876543210", key="ws_phone")
+            sim_email = st.text_input("Customer Email", value="rahul@example.com", key="ws_email")
+            sim_bank = st.selectbox("Issuer Bank Rail", ["HDFC", "SBI", "ICICI", "AXIS"], index=0, key="ws_bank")
+            sim_reason = st.selectbox("Failure Reason Code", ["INSUFFICIENT_FUNDS", "EXPIRED_CARD", "ISSUER_BANK_SERVER_DOWN", "BAD_REQUEST_PAYMENT_TIMED_OUT"], index=0, key="ws_reason")
+            sim_amount = st.number_input("Transaction Amount (₹)", value=12500.0, step=1000.0, key="ws_amount")
+            sim_category = st.selectbox("Risk Category", ["payment_failure", "failed_subscription", "cart_abandonment", "b2b_receivable"], index=0, key="ws_cat")
+
+            trigger_btn = st.button("🚀 Trigger Live Webhook & Agent Pipeline", type="primary", use_container_width=True)
+
+        with ws_col2:
+            st.markdown("#### 2. Agent Execution Telemetry & Output")
+            if trigger_btn:
+                import uuid
+                evt_id = f"EVT_SIM_{uuid.uuid4().hex[:6]}"
+                event_data = {
+                    "event_id": evt_id,
+                    "category": sim_category,
+                    "amount": sim_amount,
+                    "currency": "INR",
+                    "bank_name": sim_bank,
+                    "failure_reason": sim_reason,
+                    "customer": {
+                        "customer_id": f"CUST_{uuid.uuid4().hex[:4]}",
+                        "name": sim_name,
+                        "phone": sim_phone,
+                        "email": sim_email,
+                        "ltv": 25000.0
+                    },
+                    "attempts_count": 1,
+                    "status": "detected"
+                }
+
+                st.info(f"📥 Received Webhook Event ID: `{evt_id}`")
+                
+                # Step 1: Detect
+                detection = detect_revenue_at_risk(event_data)
+                st.success(f"✅ **[STEP 1: DETECT]** At-Risk Revenue Flagged (Risk Score: `{detection.get('risk_score', 0.85)}`)")
+
+                # Step 2: Diagnose
+                diag = diagnose(event_data)
+                root_cause = diag.get("root_cause") if isinstance(diag, dict) else getattr(diag, "root_cause", "Unknown")
+                rec_action = diag.get("recommended_action") if isinstance(diag, dict) else getattr(diag, "recommended_action", "SMART_RETRY")
+                st.write(f"🔬 **[STEP 2: DIAGNOSE]** Root Cause: `{root_cause}` | Recommended: `{rec_action}`")
+
+                # Step 3: Decide & Guardrails
+                decision = choose_action(event_data, diag)
+                execution = execute_recovery_workflow(event_data, decision, simulate_success=False)
+
+                st.write(f"🛡️ **[STEP 3: GUARDRAILS]** Status: `{execution['status'].upper()}` | Action: `{execution['action']}`")
+
+                # Step 4: Razorpay Payment Swap Link output
+                if "execution_details" in execution and "razorpay_link" in execution["execution_details"]:
+                    plink_url = execution["execution_details"]["razorpay_link"]
+                    st.markdown(f"🔗 **[STEP 4: RAZORPAY PAYMENT LINK]** Dynamic Payment Swap Link Generated: [{plink_url}]({plink_url})")
+                    
+                    # Generate QR Code image url or mock QR
+                    st.image(f"https://api.qrserver.com/v1/create-qr-code/?size=180x180&data={plink_url}", caption=f"Scan to pay ₹{sim_amount:,.2f} via UPI", width=180)
+                elif execution.get("status") == "escalated_hitl":
+                    st.warning("⚠️ **[HITL ESCALATION]** Transaction amount > ₹50,000! Event routed to Human Supervisor Queue for review.")
+
+                with st.expander("🔍 View Complete Raw JSON Audit Details"):
+                    st.json(execution)
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
 st.markdown("---")
-st.markdown("<p style='text-align:center; color:#94a3b8; font-size:0.9rem; font-weight:700;'>Razorpay RecoverAI • Autonomous AI Revenue Recovery Decision Engine • Razorpay AI Buildathon 2026</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:#94a3b8; font-size:0.9rem; font-weight:700;'>MLH RecoverAI • Autonomous AI Revenue Recovery Decision Engine • Major League Hacking (MLH) 2026</p>", unsafe_allow_html=True)
+

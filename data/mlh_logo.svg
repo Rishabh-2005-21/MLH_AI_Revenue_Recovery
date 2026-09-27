@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 110" width="300" height="110">
+  <!-- MLH Official Logo Vector -->
+  <g id="MLH_Logo">
+    <!-- Letters M (Red), L (Blue), H (Yellow) -->
+    <text x="15" y="72" font-family="'Trebuchet MS', 'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="74" fill="#E73C27">M</text>
+    <text x="95" y="72" font-family="'Trebuchet MS', 'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="74" fill="#2E52A4">L</text>
+    <text x="160" y="72" font-family="'Trebuchet MS', 'Arial Black', 'Impact', sans-serif" font-weight="900" font-size="74" fill="#F0B332">H</text>
+
+    <!-- Subtitle: MAJOR LEAGUE HACKING -->
+    <text x="120" y="100" font-family="'Plus Jakarta Sans', 'Arial Black', sans-serif" font-weight="900" font-size="14" fill="#FFFFFF" letter-spacing="2.8" text-anchor="middle">MAJOR LEAGUE HACKING</text>
+  </g>
+</svg>

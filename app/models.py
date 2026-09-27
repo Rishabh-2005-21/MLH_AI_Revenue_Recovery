@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional, List, Dict, Any
 
@@ -58,7 +58,7 @@ class RevenueRiskEvent:
     invoice_days_overdue: int = 0
     attempts_count: int = 0
     status: str = "detected" # detected, in_recovery, recovered, escalated, abandoned
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 @dataclass
 class DiagnosisResult:
@@ -91,12 +91,12 @@ class PromiseToPayRecord:
     promised_date: str # YYYY-MM-DD
     status: str = "active" # active, fulfilled, defaulted
     notes: str = ""
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 @dataclass
 class AuditRecord:
     id: Optional[int] = None
-    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     event_id: str = ""
     category: str = ""
     event_type: str = ""

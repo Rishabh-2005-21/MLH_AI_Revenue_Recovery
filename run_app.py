@@ -6,7 +6,7 @@ import time
 def main():
     print("=" * 60)
     print(" 🛡️  RECOVERAI - AI REVENUE RECOVERY PLATFORM ")
-    print(" Razorpay AI Buildathon 2026 - Track 03")
+    print(" Major League Hacking (MLH) 2026")
     print("=" * 60)
     print("\nStarting RecoverAI Streamlit Dashboard...\n")
 

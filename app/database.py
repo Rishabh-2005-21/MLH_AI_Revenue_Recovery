@@ -1,7 +1,7 @@
 import sqlite3
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
 
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "recoverai.db")
@@ -138,7 +138,7 @@ def save_risk_event(event_dict: Dict[str, Any]):
         event_dict.get("invoice_days_overdue", 0),
         event_dict.get("attempts_count", 0),
         event_dict.get("status", "detected"),
-        event_dict.get("created_at", datetime.utcnow().isoformat())
+        event_dict.get("created_at", datetime.now(timezone.utc).isoformat())
     ))
     conn.commit()
     conn.close()
@@ -171,7 +171,7 @@ def save_recovery_action(action_dict: Dict[str, Any]):
         json.dumps(action_dict.get("payload", {})),
         json.dumps(action_dict.get("applied_guardrails", [])),
         action_dict.get("money_recovered", 0.0),
-        action_dict.get("timestamp", datetime.utcnow().isoformat())
+        action_dict.get("timestamp", datetime.now(timezone.utc).isoformat())
     ))
     conn.commit()
     conn.close()
@@ -190,7 +190,7 @@ def log_audit(event_id: str, category: str, event_type: str, details: Dict[str, 
         actor,
         json.dumps(details),
         money_recovered,
-        datetime.utcnow().isoformat()
+        datetime.now(timezone.utc).isoformat()
     ))
     conn.commit()
     conn.close()
@@ -203,7 +203,7 @@ def add_to_hitl_queue(event_id: str, amount: float, proposed_action: str, reason
     INSERT OR REPLACE INTO hitl_queue (event_id, amount, proposed_action, reason, status, created_at)
     VALUES (?, ?, ?, ?, 'pending', ?)
     """, (
-        event_id, amount, proposed_action, reason, datetime.utcnow().isoformat()
+        event_id, amount, proposed_action, reason, datetime.now(timezone.utc).isoformat()
     ))
     conn.commit()
     conn.close()
@@ -241,7 +241,7 @@ def save_p2p(p2p_dict: Dict[str, Any]):
         p2p_dict["promised_date"],
         p2p_dict.get("status", "active"),
         p2p_dict.get("notes", ""),
-        p2p_dict.get("created_at", datetime.utcnow().isoformat())
+        p2p_dict.get("created_at", datetime.now(timezone.utc).isoformat())
     ))
     conn.commit()
     conn.close()

@@ -1,7 +1,7 @@
 import random
 import json
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import pandas as pd
 
 CUSTOMER_NAMES = [
@@ -46,7 +46,7 @@ def generate_synthetic_batch(count: int = 150, seed: int = 42):
     random.seed(seed)
     events = []
     
-    start_time = datetime.utcnow() - timedelta(days=7)
+    start_time = datetime.now(timezone.utc) - timedelta(days=7)
 
     for i in range(1, count + 1):
         name, email, phone, lang = random.choice(CUSTOMER_NAMES)

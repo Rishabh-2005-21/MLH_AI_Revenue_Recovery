@@ -1,4 +1,5 @@
 from typing import Dict, Any, List
+from app.services.gemini_service import call_gemini_api, is_gemini_available
 
 APP_TOUR_STEPS = [
     {
@@ -71,9 +72,20 @@ RecoverAI generates functional Razorpay Payment Links (`https://rzp.io/i/...`) a
 def query_assistant(user_prompt: str) -> str:
     """
     Answers user queries about RecoverAI app, giving full tour & guidance in Hinglish/English.
+    Uses Google Gemini API when GEMINI_API_KEY is configured.
     """
-    prompt = user_prompt.lower()
+    if is_gemini_available():
+        system_instruction = """
+You are the AI Assistant for RecoverAI (Razorpay AI Buildathon 2026 - Track 03: AI Agent for Business Revenue Recovery).
+Your role is to guide merchants and users about how RecoverAI works, its features, guardrails, Hinglish voice agent, Razorpay integration, HITL queue (>₹50,000 threshold), and measurable ROI.
+Respond in a friendly, expert, professional tone using clean Markdown formatting. Keep answers concise, actionable, and rich in detail.
+"""
+        gemini_response = call_gemini_api(user_prompt, system_instruction=system_instruction)
+        if gemini_response:
+            return f"✨ **RecoverAI Assistant (Powered by Gemini AI)**:\n\n{gemini_response}"
 
+    # Fallback Rule Matcher
+    prompt = user_prompt.lower()
     if any(w in prompt for w in ["tour", "guide", "overview", "kaise use", "how to use", "start"]):
         return FAQ_KNOWLEDGE_BASE["tour"]
     elif any(w in prompt for w in ["use", "benefit", "kya kam", "purpose", "why"]):
@@ -99,3 +111,4 @@ You asked: *"{user_prompt}"*
 - *"How does the Hinglish voice agent work?"*
 - *"Explain guardrails & HITL rule"*
 """
+

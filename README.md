@@ -1,6 +1,7 @@
-# RecoverAI – AI Revenue Recovery Agent
+# RecoverAI – MLH AI Revenue Recovery Agent
 
-**Hackathon Track:** Razorpay AI Buildathon 2026 – Track 03: AI Revenue Recovery
+**Hackathon Track:** Major League Hacking (MLH) 2026 – AI Revenue Recovery
+
 
 ---
 
