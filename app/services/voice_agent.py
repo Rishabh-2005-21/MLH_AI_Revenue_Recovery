@@ -12,7 +12,10 @@ try:
 except ImportError:
     GTTS_AVAILABLE = False
 
-AUDIO_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "audio")
+if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+    AUDIO_DIR = "/tmp/audio"
+else:
+    AUDIO_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "audio")
 
 def generate_hinglish_script(
     event: Dict[str, Any],

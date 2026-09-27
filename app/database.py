@@ -4,7 +4,10 @@ import os
 from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any, Optional
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "recoverai.db")
+if os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"):
+    DB_PATH = "/tmp/recoverai.db"
+else:
+    DB_PATH = os.getenv("DATABASE_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "recoverai.db"))
 
 def get_connection():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
